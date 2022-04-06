@@ -31,16 +31,15 @@ class Login extends React.Component {
     }
   }
 
-  handleClick = (event) => {
-    event.preventDefault();
-    const { /* history, */ userSubmit } = this.props;
+  handleClick = () => {
+    const { history, userSubmit } = this.props;
     const { email, name } = this.state;
     const userInfo = {
       name,
       email,
     };
     userSubmit(userInfo);
-    // history.push('/carteira');
+    history.push('/game');
   };
 
   render() {

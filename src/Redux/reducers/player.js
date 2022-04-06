@@ -12,8 +12,8 @@ const playerReducer = (state = INITIAL_STATE, action) => {
   case USER_LOGIN:
     return {
       ...state,
-      name: action.state,
-      email: action.state,
+      name: action.loginInfo.name,
+      gravatarEmail: action.loginInfo.email,
     };
   default:
     return state;
