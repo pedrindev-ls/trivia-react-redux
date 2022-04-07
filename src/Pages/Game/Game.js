@@ -1,19 +1,29 @@
 import React from 'react';
 import { decode } from 'html-entities';
 import { apiGetQuestions, apiGetToken } from '../../Services/api';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import md5 from 'crypto-js/md5';
+import Header from '../../Componentes/Header';
 
 class Game extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
     this.state = {
       token: null,
       questions: [],
       currentQuestion: 0,
+      image: '',
     };
   }
 
   componentDidMount() {
     this.getQuestions();
+    const { userEmail } = this.props;
+    const emailToUse = md5(userEmail).toString();
+    const URL = `https://www.gravatar.com/avatar/${emailToUse}`;
+    this.setState({ image: URL });
   }
 
   getQuestions = () => {
@@ -80,19 +90,32 @@ class Game extends React.Component {
         <section data-testid="answer-options">{answers}</section>
       );
     }
+
   }
 
   render() {
-    // const { name, email, play } = this.state;
+    const { image } = this.state;
+    const { userName } = this.props;
     return (
-      <main>
-        <h1> Game </h1>
+      <div>
+        <Header image={ image } name={ userName } />
         <div>
           {this.renderQuestion()}
           {this.renderAnswers()}
         </div>
-      </main>
+      </div>
     );
   }
 }
-export default Game;
+
+Game.propTypes = {
+  userEmail: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
+};
+
+const mapStateToProps = (store) => ({
+  userName: store.playerReducer.name,
+  userEmail: store.playerReducer.gravatarEmail,
+});
+
+export default connect(mapStateToProps, null)(Game);
