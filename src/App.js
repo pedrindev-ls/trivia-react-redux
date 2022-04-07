@@ -9,8 +9,8 @@ export default function App() {
   return (
     <Switch>
       <Route exact path="/" render={ (props) => <Login { ...props } /> } />
+      <Route exact path="/game" render={ (props) => <Game { ...props } /> } />
       <Route exact path="/settings" render={ (props) => <Settings { ...props } /> } />
-      <Route patch="/game" render={ (props) => <Game { ...props } /> } />
     </Switch>
   );
 }
