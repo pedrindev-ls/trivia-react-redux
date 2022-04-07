@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { BsGearFill } from 'react-icons/bs';
 import { userLogin, thunkToken } from '../../Redux/actions/index';
 import './loginStyle.css';
 
@@ -39,11 +40,28 @@ class Login extends React.Component {
     history.push('/game');
   };
 
+  renderSettingsButton() {
+    const { history } = this.props;
+    return (
+      <button
+        type="button"
+        className="settingsButton"
+        data-testid="btn-settings"
+        onClick={ () => { history.push('/settings'); } }
+      >
+        <BsGearFill />
+      </button>
+    );
+  }
+
   render() {
     const { name, email, play } = this.state;
     return (
-      <div>
-        <h1>Login</h1>
+      <div className="Login">
+        <h1>
+          Login
+          {this.renderSettingsButton()}
+        </h1>
         <form className="formulario">
           <label
             htmlFor="name"
