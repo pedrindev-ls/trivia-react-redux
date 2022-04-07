@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { BsGearFill } from 'react-icons/bs';
-import { userLogin } from '../../Redux/actions';
+import { userLogin, thunkToken } from '../../Redux/actions/index';
 import './loginStyle.css';
 
 class Login extends React.Component {
@@ -32,16 +32,12 @@ class Login extends React.Component {
     }
   }
 
-  handleClick = (event) => {
-    event.preventDefault();
-    const { /* history, */ userSubmit } = this.props;
+  handleClick = () => {
+    const { history, userSubmit, token } = this.props;
     const { email, name } = this.state;
-    const userInfo = {
-      name,
-      email,
-    };
-    userSubmit(userInfo);
-    // history.push('/carteira');
+    userSubmit(email, name);
+    token();
+    history.push('/game');
   };
 
   renderSettingsButton() {
@@ -90,16 +86,15 @@ class Login extends React.Component {
               required="Enter your e-mail"
               data-testid="input-gravatar-email"
               onChange={ this.handleChange }
-
             />
           </label>
           <button
             type="button"
             data-testid="btn-play"
             disabled={ play }
-            onClick={ (event) => this.handleClick(event) }
+            onClick={ this.handleClick }
           >
-            Entrar
+            Play
           </button>
         </form>
       </div>
@@ -109,15 +104,13 @@ class Login extends React.Component {
 
 Login.propTypes = {
   userSubmit: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+  token: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  userSubmit: (info) => dispatch(
-    userLogin(info),
-  ),
+  userSubmit: (email, name) => dispatch(userLogin(email, name)),
+  token: () => dispatch(thunkToken()),
 });
 
 export default connect(null, mapDispatchToProps)(Login);
