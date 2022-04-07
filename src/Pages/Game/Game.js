@@ -1,9 +1,9 @@
 import React from 'react';
 import { decode } from 'html-entities';
-import { apiGetQuestions, apiGetToken } from '../../Services/api';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
+import { apiGetQuestions, apiGetToken } from '../../Services/api';
 import Header from '../../Componentes/Header';
 
 class Game extends React.Component {
@@ -11,7 +11,6 @@ class Game extends React.Component {
     super(props);
 
     this.state = {
-      token: null,
       questions: [],
       currentQuestion: 0,
       image: '',
@@ -26,8 +25,14 @@ class Game extends React.Component {
     this.setState({ image: URL });
   }
 
-  getQuestions = () => {
-    const { token } = this.state;
+  componentDidUpdate(prevProps) {
+    const { recivedToken, token } = this.props;
+    if (prevProps.recivedToken !== recivedToken) {
+      this.getQuestions(token);
+    }
+  }
+
+  getQuestions = (token) => {
     apiGetQuestions(token)
       .then(async (questions) => {
         const responseCodeError = 3;
@@ -35,7 +40,6 @@ class Game extends React.Component {
           const receivedToken = await apiGetToken();
           const receivedQuestions = await apiGetQuestions(receivedToken.token);
           this.setState({
-            token: receivedToken.token,
             questions: receivedQuestions.results,
           });
         } else {
@@ -78,19 +82,23 @@ class Game extends React.Component {
         {decode(question.correct_answer)}
       </button>
     ));
-    answers.sort();
+
+    answers.sort(() => {
+      const subtract = 0.5;
+      return Math.random() - subtract;
+    });
+
     return answers;
   }
 
   renderAnswers = () => {
     const { questions, currentQuestion } = this.state;
-    if (questions.length > 0) {
+    if (currentQuestion < questions.length) {
       const answers = this.generateAnswers(questions[currentQuestion]);
       return (
         <section data-testid="answer-options">{answers}</section>
       );
     }
-
   }
 
   render() {
@@ -111,11 +119,15 @@ class Game extends React.Component {
 Game.propTypes = {
   userEmail: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
+  recivedToken: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (store) => ({
-  userName: store.playerReducer.name,
-  userEmail: store.playerReducer.gravatarEmail,
+  userName: store.player.name,
+  userEmail: store.player.gravatarEmail,
+  token: store.token,
+  recivedToken: store.fetchingTokenStatus.recivedToken,
 });
 
 export default connect(mapStateToProps, null)(Game);
