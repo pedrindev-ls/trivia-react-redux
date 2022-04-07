@@ -1,9 +1,15 @@
-const ENDPOINT = 'https://economia.awesomeapi.com.br/json/all';
-
-const getApi = async () => {
-  const resposta = await fetch(ENDPOINT);
-  const data = await resposta.json(); // formato json
+const apiGetToken = async () => {
+  const ENDPOINT = 'https://opentdb.com/api_token.php?command=request';
+  const response = await fetch(ENDPOINT);
+  const data = await response.json(); // formato json
   return data;
 };
 
-export default getApi;
+const apiGetQuestions = async (token) => {
+  const ENDPOINT = `https://opentdb.com/api.php?amount=5&token=${token}`;
+  const response = await fetch(ENDPOINT);
+  const data = await response.json(); // formato json
+  return data;
+};
+
+export { apiGetToken, apiGetQuestions };
