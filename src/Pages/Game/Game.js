@@ -1,4 +1,5 @@
 import React from 'react';
+import { decode } from 'html-entities';
 import { apiGetQuestions, apiGetToken } from '../../Services/api';
 
 class Game extends React.Component {
@@ -40,8 +41,8 @@ class Game extends React.Component {
       const question = questions[currentQuestion];
       return (
         <section>
-          <h2 data-testid="question-category">{question.category}</h2>
-          <p data-testid="question-text">{question.question}</p>
+          <h2 data-testid="question-category">{decode(question.category)}</h2>
+          <p data-testid="question-text">{decode(question.question)}</p>
         </section>
       );
     }
@@ -55,7 +56,7 @@ class Game extends React.Component {
           data-testid={ `wrong-answer-${index}` }
           key={ index }
         >
-          {incorrectAnswer}
+          {decode(incorrectAnswer)}
         </button>
       )));
     answers.push((
@@ -64,7 +65,7 @@ class Game extends React.Component {
         data-testid="correct-answer"
         key={ answers.length }
       >
-        {question.correct_answer}
+        {decode(question.correct_answer)}
       </button>
     ));
     answers.sort();
@@ -76,7 +77,7 @@ class Game extends React.Component {
     if (questions.length > 0) {
       const answers = this.generateAnswers(questions[currentQuestion]);
       return (
-        <section>{answers}</section>
+        <section data-testid="answer-options">{answers}</section>
       );
     }
   }
@@ -86,7 +87,7 @@ class Game extends React.Component {
     return (
       <main>
         <h1> Game </h1>
-        <div data-testid="answer-options">
+        <div>
           {this.renderQuestion()}
           {this.renderAnswers()}
         </div>
