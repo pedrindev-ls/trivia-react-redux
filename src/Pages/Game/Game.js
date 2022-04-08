@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import { apiGetQuestions, apiGetToken } from '../../Services/api';
 import Header from '../../Componentes/Header';
+import './gameStyle.css';
 
 class Game extends React.Component {
   constructor(props) {
@@ -14,11 +15,11 @@ class Game extends React.Component {
       questions: [],
       currentQuestion: 0,
       image: '',
+      questionAnswered: false,
     };
   }
 
   componentDidMount() {
-    this.getQuestions();
     const { userEmail } = this.props;
     const emailToUse = md5(userEmail).toString();
     const URL = `https://www.gravatar.com/avatar/${emailToUse}`;
@@ -26,8 +27,8 @@ class Game extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { recivedToken, token } = this.props;
-    if (prevProps.recivedToken !== recivedToken) {
+    const { token } = this.props;
+    if (token && prevProps.token !== token) {
       this.getQuestions(token);
     }
   }
@@ -63,21 +64,28 @@ class Game extends React.Component {
   }
 
   generateAnswers = (question) => {
+    const { questionAnswered } = this.state;
+
     const answers = question.incorrect_answers
       .map((incorrectAnswer, index) => ((
         <button
           type="button"
           data-testid={ `wrong-answer-${index}` }
           key={ index }
+          className={ questionAnswered ? 'answerButton wrongAnswer' : 'answerButton' }
+          onClick={ () => { this.setState({ questionAnswered: true }); } }
         >
           {decode(incorrectAnswer)}
         </button>
       )));
+
     answers.push((
       <button
         type="button"
         data-testid="correct-answer"
         key={ answers.length }
+        className={ questionAnswered ? 'answerButton correctAnswer' : 'answerButton' }
+        onClick={ () => { this.setState({ questionAnswered: true }); } }
       >
         {decode(question.correct_answer)}
       </button>
@@ -105,13 +113,13 @@ class Game extends React.Component {
     const { image } = this.state;
     const { userName } = this.props;
     return (
-      <div>
+      <main className="Game">
         <Header image={ image } name={ userName } />
         <div>
           {this.renderQuestion()}
           {this.renderAnswers()}
         </div>
-      </div>
+      </main>
     );
   }
 }
@@ -120,14 +128,12 @@ Game.propTypes = {
   userEmail: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
-  recivedToken: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (store) => ({
   userName: store.player.name,
   userEmail: store.player.gravatarEmail,
   token: store.token,
-  recivedToken: store.fetchingTokenStatus.recivedToken,
 });
 
 export default connect(mapStateToProps, null)(Game);
