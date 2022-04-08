@@ -17,30 +17,55 @@ class Game extends React.Component {
       currentQuestion: 0,
       image: '',
       questionAnswered: false,
+      timer: 30,
+      answers: [],
     };
   }
 
   async componentDidMount() {
     const { userEmail, getToken, token } = this.props;
-    this.getQuestions(token || await getToken());
+    await this.getQuestions(token || await getToken());
     const emailToUse = md5(userEmail).toString();
     const URL = `https://www.gravatar.com/avatar/${emailToUse}`;
     this.setState({ image: URL });
+    this.activateInterval();
+    this.generateAnswers();
   }
 
-  getQuestions = (token) => {
-    apiGetQuestions(token)
-      .then(async (questions) => {
-        const responseCodeError = 3;
-        if (questions.response_code === responseCodeError) {
-          const { getToken } = this.props;
-          const receivedQuestions = await apiGetQuestions(await getToken());
-          this.setState({ questions: receivedQuestions.results });
-        } else {
-          this.setState({ questions: questions.results });
-        }
-      })
-      .catch((error) => { console.log(error); });
+  activateInterval = () => {
+    const interval = 1000;
+    this.intervalTimerID = setInterval(() => {
+      const { timer } = this.state;
+      if (timer === 0) {
+        clearInterval(this.intervalTimerID);
+      } else {
+        this.setState({ timer: timer - 1 });
+      }
+    }, interval);
+  }
+
+  getQuestions = async (token) => {
+    const questions = await apiGetQuestions(token);
+    const responseCodeError = 3;
+    if (questions.response_code === responseCodeError) {
+      const { getToken } = this.props;
+      const receivedQuestions = await apiGetQuestions(await getToken());
+      this.setState({ questions: receivedQuestions.results });
+    } else {
+      this.setState({ questions: questions.results });
+    }
+    // apiGetQuestions(token)
+    //   .then(async (questions) => {
+    //     const responseCodeError = 3;
+    //     if (questions.response_code === responseCodeError) {
+    //       const { getToken } = this.props;
+    //       const receivedQuestions = await apiGetQuestions(await getToken());
+    //       this.setState({ questions: receivedQuestions.results });
+    //     } else {
+    //       this.setState({ questions: questions.results });
+    //     }
+    //   })
+    //   .catch((error) => { console.log(error); });
   }
 
   renderQuestion = () => {
@@ -56,8 +81,9 @@ class Game extends React.Component {
     }
   }
 
-  generateAnswers = (question) => {
-    const { questionAnswered } = this.state;
+  generateAnswers = () => {
+    const { questionAnswered, questions, currentQuestion } = this.state;
+    const question = questions[currentQuestion];
 
     const answers = question.incorrect_answers
       .map((incorrectAnswer, index) => ((
@@ -89,17 +115,23 @@ class Game extends React.Component {
       return Math.random() - subtract;
     });
 
-    return answers;
+    this.setState({ answers });
   }
 
   renderAnswers = () => {
-    const { questions, currentQuestion } = this.state;
+    const { questions, currentQuestion, answers } = this.state;
     if (currentQuestion < questions.length) {
-      const answers = this.generateAnswers(questions[currentQuestion]);
       return (
         <section data-testid="answer-options">{answers}</section>
       );
     }
+  }
+
+  renderTimer = () => {
+    const { timer } = this.state;
+    return (
+      <div>{timer}</div>
+    );
   }
 
   render() {
@@ -112,6 +144,7 @@ class Game extends React.Component {
           {this.renderQuestion()}
           {this.renderAnswers()}
         </div>
+        {this.renderTimer()}
       </main>
     );
   }
