@@ -32,11 +32,11 @@ class Login extends React.Component {
     }
   }
 
-  handleClick = () => {
-    const { history, userSubmit, token } = this.props;
+  handleClick = async () => {
+    const { history, userSubmit, getToken, token } = this.props;
     const { email, name } = this.state;
     userSubmit(email, name);
-    token();
+    if (!token) await getToken();
     history.push('/game');
   };
 
@@ -105,12 +105,17 @@ class Login extends React.Component {
 Login.propTypes = {
   userSubmit: PropTypes.func.isRequired,
   history: PropTypes.shape({ push: PropTypes.func }).isRequired,
-  token: PropTypes.func.isRequired,
+  getToken: PropTypes.func.isRequired,
+  token: PropTypes.string.isRequired,
 };
+
+const mapStateToProps = (store) => ({
+  token: store.token,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   userSubmit: (email, name) => dispatch(userLogin(email, name)),
-  token: () => dispatch(thunkToken()),
+  getToken: () => dispatch(thunkToken()),
 });
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
