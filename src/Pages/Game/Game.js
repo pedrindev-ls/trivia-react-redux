@@ -102,6 +102,31 @@ class Game extends React.Component {
     }
   }
 
+  goToNextQuestion = () => {
+    const { questions, currentQuestion } = this.state;
+    if ((currentQuestion + 1) < questions.length) {
+      this.setState({
+        questionAnswered: false,
+        currentQuestion: currentQuestion + 1,
+      });
+    }
+  }
+
+  renderNextButton = () => {
+    const { questionAnswered } = this.state;
+    return questionAnswered
+      ? (
+        <button
+          type="button"
+          data-testid="btn-next"
+          onClick={ this.goToNextQuestion }
+        >
+          Próxima
+        </button>
+      )
+      : null;
+  }
+
   render() {
     const { image } = this.state;
     const { userName } = this.props;
@@ -112,6 +137,7 @@ class Game extends React.Component {
           {this.renderQuestion()}
           {this.renderAnswers()}
         </div>
+        {this.renderNextButton()}
       </main>
     );
   }
