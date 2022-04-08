@@ -3,7 +3,8 @@ import { decode } from 'html-entities';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
-import { apiGetQuestions, apiGetToken } from '../../Services/api';
+import { apiGetQuestions } from '../../Services/api';
+import { thunkToken } from '../../Redux/actions/index';
 import Header from '../../Componentes/Header';
 import './gameStyle.css';
 
@@ -19,18 +20,12 @@ class Game extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const { userEmail } = this.props;
+  async componentDidMount() {
+    const { userEmail, getToken, token } = this.props;
+    this.getQuestions(token || await getToken());
     const emailToUse = md5(userEmail).toString();
     const URL = `https://www.gravatar.com/avatar/${emailToUse}`;
     this.setState({ image: URL });
-  }
-
-  componentDidUpdate(prevProps) {
-    const { token } = this.props;
-    if (token && prevProps.token !== token) {
-      this.getQuestions(token);
-    }
   }
 
   getQuestions = (token) => {
@@ -38,11 +33,9 @@ class Game extends React.Component {
       .then(async (questions) => {
         const responseCodeError = 3;
         if (questions.response_code === responseCodeError) {
-          const receivedToken = await apiGetToken();
-          const receivedQuestions = await apiGetQuestions(receivedToken.token);
-          this.setState({
-            questions: receivedQuestions.results,
-          });
+          const { getToken } = this.props;
+          const receivedQuestions = await apiGetQuestions(await getToken());
+          this.setState({ questions: receivedQuestions.results });
         } else {
           this.setState({ questions: questions.results });
         }
@@ -52,7 +45,7 @@ class Game extends React.Component {
 
   renderQuestion = () => {
     const { questions, currentQuestion } = this.state;
-    if (questions.length > 0) {
+    if (currentQuestion < questions.length) {
       const question = questions[currentQuestion];
       return (
         <section>
@@ -127,6 +120,7 @@ class Game extends React.Component {
 Game.propTypes = {
   userEmail: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
+  getToken: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
 };
 
@@ -136,4 +130,8 @@ const mapStateToProps = (store) => ({
   token: store.token,
 });
 
-export default connect(mapStateToProps, null)(Game);
+const mapDispatchToProps = (dispatch) => ({
+  getToken: () => dispatch(thunkToken()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
