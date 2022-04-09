@@ -42,6 +42,7 @@ class Game extends React.Component {
 
   activateInterval = () => {
     const interval = 1000;
+    this.setState({ timer: 30 });
     this.intervalTimerID = setInterval(() => {
       const { timer } = this.state;
       this.setState({ timer: timer - 1 });
@@ -62,18 +63,6 @@ class Game extends React.Component {
     } else {
       this.setState({ questions: questions.results });
     }
-    // apiGetQuestions(token)
-    //   .then(async (questions) => {
-    //     const responseCodeError = 3;
-    //     if (questions.response_code === responseCodeError) {
-    //       const { getToken } = this.props;
-    //       const receivedQuestions = await apiGetQuestions(await getToken());
-    //       this.setState({ questions: receivedQuestions.results });
-    //     } else {
-    //       this.setState({ questions: questions.results });
-    //     }
-    //   })
-    //   .catch((error) => { console.log(error); });
   }
 
   getAnswers = () => {
@@ -118,16 +107,23 @@ class Game extends React.Component {
     const { questionAnswered, questions, currentQuestion, answers } = this.state;
     const question = questions[currentQuestion];
     const correctAnswer = question.correct_answer;
+    let wrongAnswerIndex = 0;
     return answers.map((answer, index) => {
       const isCorrectAnswer = answer === correctAnswer;
       let answerCSSClass = '';
       if (questionAnswered) {
         answerCSSClass = isCorrectAnswer ? 'correctAnswer' : 'wrongAnswer';
       }
+      let dataTestid;
+      if (isCorrectAnswer) dataTestid = 'correct-answer';
+      else {
+        dataTestid = `wrong-answer-${wrongAnswerIndex}`;
+        wrongAnswerIndex += 1;
+      }
       return (
         <button
           type="button"
-          data-testid={ isCorrectAnswer ? 'correct-answer' : `wrong-answer-${index}` }
+          data-testid={ dataTestid }
           key={ index }
           className={ `answerButton ${answerCSSClass}` }
           onClick={ () => {
@@ -141,37 +137,6 @@ class Game extends React.Component {
         </button>
       );
     });
-    // const answers = question.incorrect_answers
-    //   .map((incorrectAnswer, index) => ((
-    //     <button
-    //       type="button"
-    //       data-testid={ `wrong-answer-${index}` }
-    //       key={ index }
-    //       className={ questionAnswered ? 'answerButton wrongAnswer' : 'answerButton' }
-    //       onClick={ () => { this.setState({ questionAnswered: true }); } }
-    //     >
-    //       {decode(incorrectAnswer)}
-    //     </button>
-    //   )));
-
-    // answers.push((
-    //   <button
-    //     type="button"
-    //     data-testid="correct-answer"
-    //     key={ answers.length }
-    //     className={ questionAnswered ? 'answerButton correctAnswer' : 'answerButton' }
-    //     onClick={ () => { this.setState({ questionAnswered: true }); } }
-    //   >
-    //     {decode(question.correct_answer)}
-    //   </button>
-    // ));
-
-    // answers.sort(() => {
-    //   const subtract = 0.5;
-    //   return Math.random() - subtract;
-    // });
-
-    // this.setState({ answers });
   }
 
   renderAnswers = () => {
@@ -193,7 +158,14 @@ class Game extends React.Component {
       this.setState({
         questionAnswered: false,
         currentQuestion: currentQuestion + 1,
+      },
+      () => {
+        this.getAnswers();
+        this.activateInterval();
       });
+    } else {
+      const { history } = this.props;
+      history.push('/feedback');
     }
   }
 
@@ -210,8 +182,8 @@ class Game extends React.Component {
         </button>
       )
       : null;
-   }
-   
+  }
+
   renderTimer = () => {
     const { timer } = this.state;
     return (
@@ -229,8 +201,8 @@ class Game extends React.Component {
           {this.renderQuestion()}
           {this.renderAnswers()}
         </div>
-        {this.renderNextButton()}
         {this.renderTimer()}
+        {this.renderNextButton()}
       </main>
     );
   }
@@ -242,6 +214,9 @@ Game.propTypes = {
   token: PropTypes.string.isRequired,
   getToken: PropTypes.func.isRequired,
   updateScore: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const mapStateToProps = (store) => ({

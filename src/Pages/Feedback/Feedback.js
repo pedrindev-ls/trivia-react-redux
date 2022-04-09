@@ -31,10 +31,11 @@ class Feedback extends React.Component {
     return (
       <>
         <Header image={ image } name={ userName } score={ score } />
+        <p data-testid="feedback-text">Feedback</p>
         <button
           type="button"
           data-testid="btn-play-again"
-          onClick={ this.handleClick() }
+          onClick={ this.handleClick }
         >
           Play Again
         </button>
@@ -53,7 +54,7 @@ const mapStateToProps = (store) => ({
 Feedback.propTypes = {
   userEmail: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
-  score: PropTypes.arrayOf(PropTypes.number).isRequired,
+  score: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps, null)(Feedback);
