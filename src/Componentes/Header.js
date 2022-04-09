@@ -11,9 +11,7 @@ class Header extends React.Component {
           {`Nome: ${name}`}
         </h4>
         <h4 data-testid="header-score">
-          {`Placar: ${score.length > 0 ? score.reduce((result, number) => (
-            result + number), 0)
-            : 0}`}
+          {`Placar: ${score}`}
         </h4>
       </div>
     );
@@ -23,7 +21,6 @@ class Header extends React.Component {
 Header.propTypes = {
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  score: PropTypes.arrayOf(PropTypes.number).isRequired,
   score: PropTypes.number.isRequired,
 };
 
