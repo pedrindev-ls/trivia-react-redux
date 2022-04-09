@@ -124,16 +124,6 @@ class Game extends React.Component {
           Ranking
 
         </button>
-        <button
-          type="button"
-          onClick={ () => {
-            const { history } = this.props;
-            history.push('/');
-          } }
-          data-testid="btn-go-home"
-        >
-          Início
-        </button>
       </main>
     );
   }
