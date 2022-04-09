@@ -4,7 +4,9 @@ class Ranking extends React.Component {
   render() {
     // const { name, email, play } = this.state;
     return (
-      <div> Ranking </div>
+      <div>
+        <h2 data-testid="ranking-title">Ranking</h2>
+      </div>
     );
   }
 }
