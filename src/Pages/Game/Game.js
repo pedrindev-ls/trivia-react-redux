@@ -28,18 +28,22 @@ class Game extends React.Component {
     const emailToUse = md5(userEmail).toString();
     const URL = `https://www.gravatar.com/avatar/${emailToUse}`;
     this.setState({ image: URL });
+    this.getAnswers();
     this.activateInterval();
-    this.generateAnswers();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalTimerID);
   }
 
   activateInterval = () => {
     const interval = 1000;
     this.intervalTimerID = setInterval(() => {
       const { timer } = this.state;
-      if (timer === 0) {
+      this.setState({ timer: timer - 1 });
+      if (timer - 1 === 0) {
+        this.setState({ questionAnswered: true });
         clearInterval(this.intervalTimerID);
-      } else {
-        this.setState({ timer: timer - 1 });
       }
     }, interval);
   }
@@ -68,6 +72,19 @@ class Game extends React.Component {
     //   .catch((error) => { console.log(error); });
   }
 
+  getAnswers = () => {
+    const { questions, currentQuestion } = this.state;
+    const question = questions[currentQuestion];
+    const incorrectAnswers = question.incorrect_answers;
+    const correctAnswer = question.correct_answer;
+    const answers = [correctAnswer, ...incorrectAnswers];
+    answers.sort(() => {
+      const subtract = 0.5;
+      return Math.random() - subtract;
+    });
+    this.setState({ answers });
+  }
+
   renderQuestion = () => {
     const { questions, currentQuestion } = this.state;
     if (currentQuestion < questions.length) {
@@ -81,48 +98,71 @@ class Game extends React.Component {
     }
   }
 
-  generateAnswers = () => {
-    const { questionAnswered, questions, currentQuestion } = this.state;
+  generateAnswersButton = () => {
+    const { questionAnswered, questions, currentQuestion, answers } = this.state;
     const question = questions[currentQuestion];
-
-    const answers = question.incorrect_answers
-      .map((incorrectAnswer, index) => ((
+    const correctAnswer = question.correct_answer;
+    return answers.map((answer, index) => {
+      const isCorrectAnswer = answer === correctAnswer;
+      let answerCSSClass = '';
+      if (questionAnswered) {
+        answerCSSClass = isCorrectAnswer ? 'correctAnswer' : 'wrongAnswer';
+      }
+      return (
         <button
           type="button"
-          data-testid={ `wrong-answer-${index}` }
+          data-testid={ isCorrectAnswer ? 'correct-answer' : `wrong-answer-${index}` }
           key={ index }
-          className={ questionAnswered ? 'answerButton wrongAnswer' : 'answerButton' }
+          className={ `answerButton ${answerCSSClass}` }
           onClick={ () => { this.setState({ questionAnswered: true }); } }
+          disabled={ questionAnswered }
         >
-          {decode(incorrectAnswer)}
+          {decode(answer)}
         </button>
-      )));
-
-    answers.push((
-      <button
-        type="button"
-        data-testid="correct-answer"
-        key={ answers.length }
-        className={ questionAnswered ? 'answerButton correctAnswer' : 'answerButton' }
-        onClick={ () => { this.setState({ questionAnswered: true }); } }
-      >
-        {decode(question.correct_answer)}
-      </button>
-    ));
-
-    answers.sort(() => {
-      const subtract = 0.5;
-      return Math.random() - subtract;
+      );
     });
+    // const answers = question.incorrect_answers
+    //   .map((incorrectAnswer, index) => ((
+    //     <button
+    //       type="button"
+    //       data-testid={ `wrong-answer-${index}` }
+    //       key={ index }
+    //       className={ questionAnswered ? 'answerButton wrongAnswer' : 'answerButton' }
+    //       onClick={ () => { this.setState({ questionAnswered: true }); } }
+    //     >
+    //       {decode(incorrectAnswer)}
+    //     </button>
+    //   )));
 
-    this.setState({ answers });
+    // answers.push((
+    //   <button
+    //     type="button"
+    //     data-testid="correct-answer"
+    //     key={ answers.length }
+    //     className={ questionAnswered ? 'answerButton correctAnswer' : 'answerButton' }
+    //     onClick={ () => { this.setState({ questionAnswered: true }); } }
+    //   >
+    //     {decode(question.correct_answer)}
+    //   </button>
+    // ));
+
+    // answers.sort(() => {
+    //   const subtract = 0.5;
+    //   return Math.random() - subtract;
+    // });
+
+    // this.setState({ answers });
   }
 
   renderAnswers = () => {
-    const { questions, currentQuestion, answers } = this.state;
+    const { questions, currentQuestion } = this.state;
     if (currentQuestion < questions.length) {
       return (
-        <section data-testid="answer-options">{answers}</section>
+        <section data-testid="answer-options">
+          {
+            this.generateAnswersButton()
+          }
+        </section>
       );
     }
   }
