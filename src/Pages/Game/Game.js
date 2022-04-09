@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import { apiGetQuestions } from '../../Services/api';
-import { thunkToken } from '../../Redux/actions/index';
+import { saveScore, thunkToken } from '../../Redux/actions/index';
 import Header from '../../Componentes/Header';
 import './gameStyle.css';
 
@@ -19,6 +19,10 @@ class Game extends React.Component {
       questionAnswered: false,
       timer: 30,
       answers: [],
+      score: 0,
+      questionDifficulties: {
+        easy: 1, medium: 2, hard: 3,
+      },
     };
   }
 
@@ -98,6 +102,18 @@ class Game extends React.Component {
     }
   }
 
+  addPoints = () => {
+    const { questions, currentQuestion, timer, questionDifficulties, score } = this.state;
+    const { updateScore } = this.props;
+    let { difficulty } = questions[currentQuestion];
+    difficulty = questionDifficulties[difficulty];
+    const ten = 10;
+    const points = ten + (timer * difficulty);
+    const newScore = score + points;
+    this.setState({ score: newScore });
+    updateScore(newScore);
+  }
+
   generateAnswersButton = () => {
     const { questionAnswered, questions, currentQuestion, answers } = this.state;
     const question = questions[currentQuestion];
@@ -114,7 +130,11 @@ class Game extends React.Component {
           data-testid={ isCorrectAnswer ? 'correct-answer' : `wrong-answer-${index}` }
           key={ index }
           className={ `answerButton ${answerCSSClass}` }
-          onClick={ () => { this.setState({ questionAnswered: true }); } }
+          onClick={ () => {
+            clearInterval(this.intervalTimerID);
+            this.setState({ questionAnswered: true });
+            if (isCorrectAnswer) this.addPoints();
+          } }
           disabled={ questionAnswered }
         >
           {decode(answer)}
@@ -175,11 +195,11 @@ class Game extends React.Component {
   }
 
   render() {
-    const { image } = this.state;
+    const { image, score } = this.state;
     const { userName } = this.props;
     return (
       <main className="Game">
-        <Header image={ image } name={ userName } />
+        <Header image={ image } name={ userName } score={ score } />
         <div>
           {this.renderQuestion()}
           {this.renderAnswers()}
@@ -193,8 +213,9 @@ class Game extends React.Component {
 Game.propTypes = {
   userEmail: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
-  getToken: PropTypes.func.isRequired,
   token: PropTypes.string.isRequired,
+  getToken: PropTypes.func.isRequired,
+  updateScore: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (store) => ({
@@ -205,6 +226,7 @@ const mapStateToProps = (store) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(thunkToken()),
+  updateScore: (score) => dispatch(saveScore(score)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
