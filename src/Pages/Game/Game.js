@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import { apiGetQuestions } from '../../Services/api';
-import { saveScore, thunkToken } from '../../Redux/actions/index';
+import { saveScore, saveAssertions, thunkToken } from '../../Redux/actions/index';
 import Header from '../../Componentes/Header';
 import './gameStyle.css';
 
@@ -19,7 +19,8 @@ class Game extends React.Component {
       questionAnswered: false,
       timer: 30,
       answers: [],
-      score: 0,
+      currentScore: 0,
+      currentAssertions: 0,
       questionDifficulties: {
         easy: 1, medium: 2, hard: 3,
       },
@@ -92,15 +93,20 @@ class Game extends React.Component {
   }
 
   addPoints = () => {
-    const { questions, currentQuestion, timer, questionDifficulties, score } = this.state;
-    const { updateScore } = this.props;
+    const { questions, currentQuestion, timer,
+      questionDifficulties, currentScore, currentAssertions } = this.state;
+    const { updateScore, updateAsserion,
+      score } = this.props;
     let { difficulty } = questions[currentQuestion];
     difficulty = questionDifficulties[difficulty];
     const ten = 10;
     const points = ten + (timer * difficulty);
-    const newScore = score + points;
-    this.setState({ score: newScore });
-    updateScore(newScore);
+    this.setState({
+      currentScore: currentScore + points,
+      currentAssertions: currentAssertions + 1,
+    });
+    updateScore(score + points);
+    updateAsserion(currentAssertions + 1);
   }
 
   generateAnswersButton = () => {
@@ -192,11 +198,11 @@ class Game extends React.Component {
   }
 
   render() {
-    const { image, score } = this.state;
+    const { image, currentScore } = this.state;
     const { userName } = this.props;
     return (
       <main className="Game">
-        <Header image={ image } name={ userName } score={ score } />
+        <Header image={ image } name={ userName } score={ currentScore } />
         <div>
           {this.renderQuestion()}
           {this.renderAnswers()}
@@ -214,6 +220,8 @@ Game.propTypes = {
   token: PropTypes.string.isRequired,
   getToken: PropTypes.func.isRequired,
   updateScore: PropTypes.func.isRequired,
+  updateAsserion: PropTypes.func.isRequired,
+  score: PropTypes.number.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
@@ -223,11 +231,13 @@ const mapStateToProps = (store) => ({
   userName: store.player.name,
   userEmail: store.player.gravatarEmail,
   token: store.token,
+  score: store.player.score,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(thunkToken()),
   updateScore: (score) => dispatch(saveScore(score)),
+  updateAsserion: (asserion) => dispatch(saveAssertions(asserion)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
