@@ -201,6 +201,17 @@ class Game extends React.Component {
           {this.renderQuestion()}
           {this.renderAnswers()}
         </div>
+        <button type="button" data-testid="btn-next">Next</button>
+        <button
+          type="button"
+          data-testid="btn-ranking"
+          onClick={ () => {
+            const { history } = this.props;
+            history.push('/ranking');
+          } }
+        >
+          Ranking
+        </button>
         {this.renderTimer()}
         {this.renderNextButton()}
       </main>
@@ -212,6 +223,7 @@ Game.propTypes = {
   userEmail: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
   token: PropTypes.string.isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
   getToken: PropTypes.func.isRequired,
   updateScore: PropTypes.func.isRequired,
   history: PropTypes.shape({
