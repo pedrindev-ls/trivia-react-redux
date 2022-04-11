@@ -25,6 +25,15 @@ class Feedback extends React.Component {
     this.setState({ redirect: true });
   }
 
+  messages = () => {
+    const { assertions } = this.props;
+    const minAnswers = 3;
+    if (assertions < minAnswers) {
+      return 'Could be better...';
+    }
+    return 'Well Done!';
+  }
+
   render() {
     const { image, redirect } = this.state;
     const { userName, score, assertions } = this.props;
@@ -41,7 +50,17 @@ class Feedback extends React.Component {
           {' '}
           <span data-testid="feedback-total-score">{score}</span>
         </h4>
-        <p data-testid="feedback-text">Feedback</p>
+        <p data-testid="feedback-text">{this.messages()}</p>
+        <button
+          type="button"
+          data-testid="btn-ranking"
+          onClick={ () => {
+            const { history } = this.props;
+            history.push('/ranking');
+          } }
+        >
+          Ranking
+        </button>
         <button
           type="button"
           data-testid="btn-play-again"
@@ -55,18 +74,19 @@ class Feedback extends React.Component {
   }
 }
 
+Feedback.propTypes = {
+  userEmail: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
+  assertions: PropTypes.number.isRequired,
+  score: PropTypes.number.isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+};
+
 const mapStateToProps = (store) => ({
   userName: store.player.name,
   userEmail: store.player.gravatarEmail,
   score: store.player.score,
   assertions: store.player.assertions,
 });
-
-Feedback.propTypes = {
-  userEmail: PropTypes.string.isRequired,
-  userName: PropTypes.string.isRequired,
-  score: PropTypes.number.isRequired,
-  assertions: PropTypes.number.isRequired,
-};
 
 export default connect(mapStateToProps, null)(Feedback);
