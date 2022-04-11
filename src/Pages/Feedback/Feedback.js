@@ -43,6 +43,16 @@ class Feedback extends React.Component {
         <p data-testid="feedback-text">{this.messages()}</p>
         <button
           type="button"
+          data-testid="btn-ranking"
+          onClick={ () => {
+            const { history } = this.props;
+            history.push('/ranking');
+          } }
+        >
+          Ranking
+        </button>
+        <button
+          type="button"
           data-testid="btn-play-again"
           onClick={ this.handleClick }
         >
@@ -54,18 +64,19 @@ class Feedback extends React.Component {
   }
 }
 
+Feedback.propTypes = {
+  userEmail: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
+  assertions: PropTypes.number.isRequired,
+  score: PropTypes.number.isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+};
+
 const mapStateToProps = (store) => ({
   userName: store.player.name,
   userEmail: store.player.gravatarEmail,
   assertions: store.player.assertions,
   score: store.player.score,
 });
-
-Feedback.propTypes = {
-  userEmail: PropTypes.string.isRequired,
-  userName: PropTypes.string.isRequired,
-  assertions: PropTypes.number.isRequired,
-  score: PropTypes.number.isRequired,
-};
 
 export default connect(mapStateToProps, null)(Feedback);
