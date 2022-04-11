@@ -55,7 +55,8 @@ class Game extends React.Component {
   }
 
   getQuestions = async (token) => {
-    const questions = await apiGetQuestions(token);
+    const { category } = this.props;
+    const questions = await apiGetQuestions(token, { category });
     const responseCodeError = 3;
     if (questions.response_code === responseCodeError) {
       const { getToken } = this.props;
@@ -223,6 +224,7 @@ Game.propTypes = {
   updateScore: PropTypes.func.isRequired,
   updateAssertion: PropTypes.func.isRequired,
   score: PropTypes.number.isRequired,
+  category: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (store) => ({
@@ -230,12 +232,13 @@ const mapStateToProps = (store) => ({
   userEmail: store.player.gravatarEmail,
   token: store.token,
   score: store.player.score,
+  category: store.settings.category,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(thunkToken()),
   updateScore: (score) => dispatch(saveScore(score)),
-  updateAssertion: (asserion) => dispatch(saveAssertions(asserion)),
+  updateAssertion: (assertion) => dispatch(saveAssertions(assertion)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
