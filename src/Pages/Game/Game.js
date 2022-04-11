@@ -95,7 +95,7 @@ class Game extends React.Component {
   addPoints = () => {
     const { questions, currentQuestion, timer,
       questionDifficulties, currentScore, currentAssertions } = this.state;
-    const { updateScore, updateAsserion,
+    const { updateScore, updateAssertion,
       score } = this.props;
     let { difficulty } = questions[currentQuestion];
     difficulty = questionDifficulties[difficulty];
@@ -106,7 +106,7 @@ class Game extends React.Component {
       currentAssertions: currentAssertions + 1,
     });
     updateScore(score + points);
-    updateAsserion(currentAssertions + 1);
+    updateAssertion(currentAssertions + 1);
   }
 
   generateAnswersButton = () => {
@@ -221,7 +221,7 @@ Game.propTypes = {
   history: PropTypes.shape({ push: PropTypes.func }).isRequired,
   getToken: PropTypes.func.isRequired,
   updateScore: PropTypes.func.isRequired,
-  updateAsserion: PropTypes.func.isRequired,
+  updateAssertion: PropTypes.func.isRequired,
   score: PropTypes.number.isRequired,
 };
 
@@ -235,7 +235,7 @@ const mapStateToProps = (store) => ({
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(thunkToken()),
   updateScore: (score) => dispatch(saveScore(score)),
-  updateAsserion: (asserion) => dispatch(saveAssertions(asserion)),
+  updateAssertion: (asserion) => dispatch(saveAssertions(asserion)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
