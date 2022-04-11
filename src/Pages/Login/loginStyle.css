@@ -1,17 +1,75 @@
 * {
+  align-items: center;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-.Login h1 {
+.login-body {
+  background-image: linear-gradient(45deg, #c71fbe, yellow);
+  border-radius: 15px;
+  color: white;
+  left: 50%;
+  padding: 80px;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.Login {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title {
+  color: #2d0675;
+  font-size: 30px;
+  margin: 10px;
+}
+
+.Login input {
+  background: white;
+  border: none;
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 50px;
+  margin: 5px;
+  width: 444px;
 }
 
 .Login .settingsButton {
-  background-color: transparent;
+  background-color: yellow;
   border: none;
+  border-radius: 9px;
   cursor: pointer;
   font-size: 30px;
-  line-height: 0;
+  margin: 5px;
+  width: 50px;
+}
+
+.Login button {
+  background-color: yellow;
+  border: none;
+  border-radius: 9px;
+  color: black;
+  cursor: pointer;
+  height: 50px;
+  left: 50%;
+  margin: 5px;
+  top: 50%;
+  width: 375px;
+}
+
+.botoes {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

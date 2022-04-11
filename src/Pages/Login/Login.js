@@ -57,46 +57,52 @@ class Login extends React.Component {
   render() {
     const { name, email, play } = this.state;
     return (
-      <div className="Login">
-        <h1>
-          Login
-          {this.renderSettingsButton()}
-        </h1>
-        <form className="formulario">
-          <label
-            htmlFor="name"
-          >
-            <input
-              type="text"
-              name="name"
-              value={ name }
-              placeholder="Name:"
-              data-testid="input-player-name"
-              onChange={ this.handleChange }
-            />
-          </label>
-          <label
-            htmlFor="email"
-          >
-            <input
-              type="email"
-              name="email"
-              value={ email }
-              placeholder="Email:"
-              required="Enter your e-mail"
-              data-testid="input-gravatar-email"
-              onChange={ this.handleChange }
-            />
-          </label>
-          <button
-            type="button"
-            data-testid="btn-play"
-            disabled={ play }
-            onClick={ this.handleClick }
-          >
-            Play
-          </button>
-        </form>
+      <div className="login-body">
+        <div className="Login">
+          <div className="title">
+            <h1>
+              Login
+            </h1>
+          </div>
+          <form className="formulario">
+            <label
+              htmlFor="name"
+            >
+              <input
+                type="text"
+                name="name"
+                value={ name }
+                placeholder=" Name:"
+                data-testid="input-player-name"
+                onChange={ this.handleChange }
+              />
+            </label>
+            <label
+              htmlFor="email"
+            >
+              <input
+                type="email"
+                name="email"
+                value={ email }
+                placeholder=" Email:"
+                required="Enter your e-mail"
+                data-testid="input-gravatar-email"
+                onChange={ this.handleChange }
+              />
+            </label>
+            <div className="botoes">
+              <button
+                type="button"
+                data-testid="btn-play"
+                disabled={ play }
+                onClick={ this.handleClick }
+              >
+                Play
+              </button>
+              {this.renderSettingsButton()}
+            </div>
+          </form>
+        </div>
       </div>
     );
   }
