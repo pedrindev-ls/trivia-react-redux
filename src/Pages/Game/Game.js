@@ -62,18 +62,6 @@ class Game extends React.Component {
     } else {
       this.setState({ questions: questions.results });
     }
-    // apiGetQuestions(token)
-    //   .then(async (questions) => {
-    //     const responseCodeError = 3;
-    //     if (questions.response_code === responseCodeError) {
-    //       const { getToken } = this.props;
-    //       const receivedQuestions = await apiGetQuestions(await getToken());
-    //       this.setState({ questions: receivedQuestions.results });
-    //     } else {
-    //       this.setState({ questions: questions.results });
-    //     }
-    //   })
-    //   .catch((error) => { console.log(error); });
   }
 
   getAnswers = () => {
@@ -210,8 +198,8 @@ class Game extends React.Component {
         </button>
       )
       : null;
-   }
-   
+  }
+
   renderTimer = () => {
     const { timer } = this.state;
     return (
