@@ -5,9 +5,10 @@ const apiGetToken = async () => {
   return data;
 };
 
-const apiGetQuestions = async (token, { category = '' }) => {
+const apiGetQuestions = async (token, { category = '', difficulty = '' }) => {
   let endPoint = `https://opentdb.com/api.php?amount=5&token=${token}`;
   if (category) endPoint += `&category=${category}`;
+  if (difficulty) endPoint += `&difficulty=${difficulty}`;
   const response = await fetch(endPoint);
   const data = await response.json();
   return data;

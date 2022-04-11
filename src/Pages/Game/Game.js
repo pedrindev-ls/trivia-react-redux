@@ -55,8 +55,8 @@ class Game extends React.Component {
   }
 
   getQuestions = async (token) => {
-    const { category } = this.props;
-    const questions = await apiGetQuestions(token, { category });
+    const { category, difficulty } = this.props;
+    const questions = await apiGetQuestions(token, { category, difficulty });
     const responseCodeError = 3;
     if (questions.response_code === responseCodeError) {
       const { getToken } = this.props;
@@ -225,6 +225,7 @@ Game.propTypes = {
   updateAssertion: PropTypes.func.isRequired,
   score: PropTypes.number.isRequired,
   category: PropTypes.string.isRequired,
+  difficulty: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (store) => ({
@@ -233,6 +234,7 @@ const mapStateToProps = (store) => ({
   token: store.token,
   score: store.player.score,
   category: store.settings.category,
+  difficulty: store.settings.difficulty,
 });
 
 const mapDispatchToProps = (dispatch) => ({

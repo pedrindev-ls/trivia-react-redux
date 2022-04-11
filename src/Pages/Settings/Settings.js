@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { actionChangeCategory } from '../../Redux/actions';
+import { actionChangeCategory, actionChangeDifficulty } from '../../Redux/actions';
 import { apiGetCategories } from '../../Services/api';
 
 class Settings extends React.Component {
@@ -18,10 +18,10 @@ class Settings extends React.Component {
     this.setState({ categories });
   }
 
-  handleCategories = ({ target }) => {
-    const { changeCategory } = this.props;
-    const { value } = target;
-    changeCategory(value);
+  handleSettings = ({ target }) => {
+    const { name, value } = target;
+    const { [name]: changeSettings } = this.props;
+    changeSettings(value);
   }
 
   renderCategories() {
@@ -31,12 +31,12 @@ class Settings extends React.Component {
       <label htmlFor="selectCategory">
         {'Categoria: '}
         <select
-          name="category"
+          name="changeCategory"
           value={ category }
           id="selectCategory"
-          onChange={ this.handleCategories }
+          onChange={ this.handleSettings }
         >
-          <option key="0" value="">Any Category</option>
+          <option key="" value="">Any Category</option>
           {
             categories.map(({ id, name }) => (
               <option key={ id } value={ id }>{name}</option>
@@ -47,7 +47,27 @@ class Settings extends React.Component {
     );
   }
 
-  renderInnitButton = () => (
+  renderDifficulties() {
+    const { difficulty } = this.props;
+    return (
+      <label htmlFor="selectDifficulty">
+        {'Dificuldade: '}
+        <select
+          name="changeDifficulty"
+          value={ difficulty }
+          id="selectDifficulty"
+          onChange={ this.handleSettings }
+        >
+          <option value="">Any Difficulty</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </label>
+    );
+  }
+
+  renderHomeButton = () => (
     <div>
       <button
         type="button"
@@ -67,7 +87,8 @@ class Settings extends React.Component {
       <main className="Settings">
         <h1 data-testid="settings-title"> Configurações </h1>
         {this.renderCategories()}
-        {this.renderInnitButton()}
+        {this.renderDifficulties()}
+        {this.renderHomeButton()}
       </main>
     );
   }
@@ -75,16 +96,20 @@ class Settings extends React.Component {
 
 Settings.propTypes = {
   changeCategory: PropTypes.func.isRequired,
+  changeDifficulty: PropTypes.func.isRequired,
   category: PropTypes.string.isRequired,
+  difficulty: PropTypes.string.isRequired,
   history: PropTypes.shape({ push: PropTypes.func }).isRequired,
 };
 
 const mapStateToProps = (store) => ({
   category: store.settings.category,
+  difficulty: store.settings.difficulty,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   changeCategory: (category) => dispatch(actionChangeCategory(category)),
+  changeDifficulty: (difficulty) => dispatch(actionChangeDifficulty(difficulty)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);
