@@ -1,8 +1,9 @@
-import { CHANGE_CATEGORY, CHANGE_DIFFICULTY } from '../actions/index';
+import { CHANGE_CATEGORY, CHANGE_DIFFICULTY, CHANGE_TYPE } from '../actions/index';
 
 const INITIAL_STATE = {
   category: '',
   difficulty: '',
+  questionType: '',
 };
 
 const settings = (state = INITIAL_STATE, action) => {
@@ -11,6 +12,8 @@ const settings = (state = INITIAL_STATE, action) => {
     return { ...state, category: action.category };
   case CHANGE_DIFFICULTY:
     return { ...state, difficulty: action.difficulty };
+  case CHANGE_TYPE:
+    return { ...state, questionType: action.questionType };
   default:
     return state;
   }

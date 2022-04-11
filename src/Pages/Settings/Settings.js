@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { actionChangeCategory, actionChangeDifficulty } from '../../Redux/actions';
+import {
+  actionChangeCategory, actionChangeDifficulty, actionChangeType,
+} from '../../Redux/actions';
 import { apiGetCategories } from '../../Services/api';
 
 class Settings extends React.Component {
@@ -9,13 +11,14 @@ class Settings extends React.Component {
     super();
 
     this.state = {
+      loading: true,
       categories: [],
     };
   }
 
   async componentDidMount() {
     const categories = (await apiGetCategories()).trivia_categories;
-    this.setState({ categories });
+    this.setState({ categories, loading: false });
   }
 
   handleSettings = ({ target }) => {
@@ -67,6 +70,35 @@ class Settings extends React.Component {
     );
   }
 
+  renderTypes() {
+    const { questionType } = this.props;
+    return (
+      <label htmlFor="selectType">
+        {'Tipo: '}
+        <select
+          name="changeType"
+          value={ questionType }
+          id="selectType"
+          onChange={ this.handleSettings }
+        >
+          <option value="">Any Type</option>
+          <option value="multiple">Multiple Choice</option>
+          <option value="boolean">True / False</option>
+        </select>
+      </label>
+    );
+  }
+
+  renderForm() {
+    return (
+      <form>
+        {this.renderCategories()}
+        {this.renderDifficulties()}
+        {this.renderTypes()}
+      </form>
+    );
+  }
+
   renderHomeButton = () => (
     <div>
       <button
@@ -83,11 +115,11 @@ class Settings extends React.Component {
   )
 
   render() {
+    const { loading } = this.state;
     return (
       <main className="Settings">
         <h1 data-testid="settings-title"> Configurações </h1>
-        {this.renderCategories()}
-        {this.renderDifficulties()}
+        {(loading) ? 'Carregando...' : this.renderForm()}
         {this.renderHomeButton()}
       </main>
     );
@@ -97,19 +129,23 @@ class Settings extends React.Component {
 Settings.propTypes = {
   changeCategory: PropTypes.func.isRequired,
   changeDifficulty: PropTypes.func.isRequired,
+  changeType: PropTypes.func.isRequired,
   category: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,
+  questionType: PropTypes.string.isRequired,
   history: PropTypes.shape({ push: PropTypes.func }).isRequired,
 };
 
 const mapStateToProps = (store) => ({
   category: store.settings.category,
   difficulty: store.settings.difficulty,
+  questionType: store.settings.questionType,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   changeCategory: (category) => dispatch(actionChangeCategory(category)),
   changeDifficulty: (difficulty) => dispatch(actionChangeDifficulty(difficulty)),
+  changeType: (type) => dispatch(actionChangeType(type)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);
