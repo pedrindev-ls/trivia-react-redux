@@ -17,3 +17,57 @@
   border: 3px solid rgb(6, 240, 15);
   box-shadow: 0 0 3px rgb(6, 240, 15) , 0 0 10px rgb(6, 240, 15);
 }
+
+.Game {
+  display: flex;
+  justify-content: center;
+}
+
+.Content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+  text-align: center;
+}
+
+.Questions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+  text-align: center;
+}
+
+.span {
+  display: flex;
+  flex-direction: row;
+  font-size: 40px;
+  justify-content: center;
+}
+
+.Answers {
+  display: flex;
+  flex-direction: column;
+}
+
+.nextButton button {
+  font-size: 15px;
+  height: 30px;
+  width: 100px;
+}
+
+.Answers section button {
+  font-size: 18px;
+  height: 40px;
+  width: 500px;
+}
+
+.Questions p {
+  font-size: 18px;
+  height: 60px;
+  width: 500px;
+}
+
+.Questions h2 {
+  padding-block-end: 5%;
+}
+

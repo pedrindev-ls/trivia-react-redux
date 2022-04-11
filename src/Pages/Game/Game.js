@@ -149,7 +149,7 @@ class Game extends React.Component {
     const { questions, currentQuestion } = this.state;
     if (currentQuestion < questions.length) {
       return (
-        <section data-testid="answer-options">
+        <section data-testid="answer-options" className="Answers">
           {
             this.generateAnswersButton()
           }
@@ -184,7 +184,7 @@ class Game extends React.Component {
           data-testid="btn-next"
           onClick={ this.goToNextQuestion }
         >
-          Próxima
+          Próximo
         </button>
       )
       : null;
@@ -202,13 +202,21 @@ class Game extends React.Component {
     const { userName } = this.props;
     return (
       <main className="Game">
-        <Header image={ image } name={ userName } score={ currentScore } />
-        <div>
-          {this.renderQuestion()}
-          {this.renderAnswers()}
+        <div className="Content">
+          <Header image={ image } name={ userName } score={ currentScore } />
+          <div className="Questions">
+            {this.renderQuestion()}
+            <div className="Answers">
+              {this.renderAnswers()}
+            </div>
+          </div>
+          <div className="Timer">
+            <span>{`Tempo: ${this.renderTimer()}`}</span>
+          </div>
+          <div className="nextButton">
+            {this.renderNextButton()}
+          </div>
         </div>
-        {this.renderTimer()}
-        {this.renderNextButton()}
       </main>
     );
   }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import md5 from 'crypto-js/md5';
 import Header from '../../Componentes/Header';
+import './feedbackStyle.css';
 
 class Feedback extends React.Component {
   constructor() {
@@ -38,38 +39,44 @@ class Feedback extends React.Component {
     const { image, redirect } = this.state;
     const { userName, score, assertions } = this.props;
     return (
-      <>
-        <Header image={ image } name={ userName } score={ score } />
-        <h4>
-          Respostas corretas:
-          {' '}
-          <span data-testid="feedback-total-question">{assertions}</span>
-        </h4>
-        <h4>
-          Pontuação total:
-          {' '}
-          <span data-testid="feedback-total-score">{score}</span>
-        </h4>
-        <p data-testid="feedback-text">{this.messages()}</p>
-        <button
-          type="button"
-          data-testid="btn-ranking"
-          onClick={ () => {
-            const { history } = this.props;
-            history.push('/ranking');
-          } }
-        >
-          Ranking
-        </button>
-        <button
-          type="button"
-          data-testid="btn-play-again"
-          onClick={ this.handleClick }
-        >
-          Play Again
-        </button>
-        {redirect && <Redirect to="/" />}
-      </>
+      <div className="feedback">
+        <div className="feedback-body">
+          <Header image={ image } name={ userName } score={ score } />
+          <div className="feedback-points">
+            <h4>
+              Respostas corretas:
+              {' '}
+              <span data-testid="feedback-total-question">{assertions}</span>
+            </h4>
+            <h4>
+              Pontuação total:
+              {' '}
+              <span data-testid="feedback-total-score">{score}</span>
+            </h4>
+          </div>
+          <p data-testid="feedback-text">{this.messages()}</p>
+          <button
+            type="button"
+            data-testid="btn-ranking"
+            onClick={ () => {
+              const { history } = this.props;
+              history.push('/ranking');
+            } }
+            className="feedback-buttons"
+          >
+            Ranking
+          </button>
+          <button
+            type="button"
+            data-testid="btn-play-again"
+            onClick={ this.handleClick }
+            className="feedback-buttons"
+          >
+            Play Again
+          </button>
+          {redirect && <Redirect to="/" />}
+        </div>
+      </div>
     );
   }
 }
