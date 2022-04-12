@@ -40,6 +40,10 @@
   width: 444px;
 }
 
+.Login input:hover {
+  font-size: 20px;
+}
+
 .Login .settingsButton {
   background-color: yellow;
   border: none;

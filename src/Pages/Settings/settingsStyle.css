@@ -9,7 +9,7 @@
 
 .Settings .settings-container {
   align-items: center;
-  border: 2px solid black;
+  border: 2px solid lightgray;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -30,7 +30,6 @@
 
 .Settings label {
   align-items: center;
-  background-color: rgb(240, 240, 240);
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -42,13 +41,21 @@
 }
 
 .Settings select {
-  background-color: white;
+  background-color: yellow;
+  border: none;
   border-radius: 10px;
+  box-shadow: 10px 5px 5px gray;
+  color: #2d0675;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   margin-top: 5px;
   padding: 5px;
   text-align: center;
+  width: 400px;
+}
+
+.Settings select:hover {
+  font-size: 17px;
 }
 
 .Settings .loading {
@@ -58,12 +65,20 @@
 }
 
 .Settings button {
-  background-color: rgb(240, 240, 240);
+  background-color: yellow;
   border: none;
   border-radius: 10px;
+  box-shadow: 10px 5px 5px gray;
+  color: #2d0675;
   cursor: pointer;
-  font-size: 18px;
-  padding: 10px;
+  font-size: 15px;
+  height: 30px;
+  margin: 4px;
+  width: 150px;
+}
+
+.Settings button:hover {
+  font-size: 17px;
 }
 
 @keyframes spin {
