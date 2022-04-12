@@ -1,8 +1,13 @@
 .header-container {
   display: flex;
   justify-content: center;
+  padding-top: 1%;
+  position: fixed;
+  top: 0;
 }
 
 .player-info {
+  color: #2d0675;
   padding: 10px;
+  text-align: left;
 }
