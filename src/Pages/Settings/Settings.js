@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { BsGearFill } from 'react-icons/bs';
 import {
   actionChangeCategory, actionChangeDifficulty, actionChangeType,
 } from '../../Redux/actions';
 import { apiGetCategories } from '../../Services/api';
+import './settingsStyle.css';
 
 class Settings extends React.Component {
   constructor() {
@@ -32,7 +34,7 @@ class Settings extends React.Component {
     const { category } = this.props;
     return (
       <label htmlFor="selectCategory">
-        {'Categoria: '}
+        Categoria
         <select
           name="changeCategory"
           value={ category }
@@ -54,7 +56,7 @@ class Settings extends React.Component {
     const { difficulty } = this.props;
     return (
       <label htmlFor="selectDifficulty">
-        {'Dificuldade: '}
+        Dificuldade
         <select
           name="changeDifficulty"
           value={ difficulty }
@@ -74,7 +76,7 @@ class Settings extends React.Component {
     const { questionType } = this.props;
     return (
       <label htmlFor="selectType">
-        {'Tipo: '}
+        Tipo
         <select
           name="changeType"
           value={ questionType }
@@ -118,9 +120,11 @@ class Settings extends React.Component {
     const { loading } = this.state;
     return (
       <main className="Settings">
-        <h1 data-testid="settings-title"> Configurações </h1>
-        {(loading) ? 'Carregando...' : this.renderForm()}
-        {this.renderHomeButton()}
+        <div className="settings-container">
+          <h1 data-testid="settings-title"> Configurações </h1>
+          {(loading) ? <BsGearFill className="loading" /> : this.renderForm()}
+          {this.renderHomeButton()}
+        </div>
       </main>
     );
   }

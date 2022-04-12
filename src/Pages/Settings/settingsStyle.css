@@ -1,3 +1,77 @@
-* {
-  margin: 0;
+.Settings {
+  align-items: flex-start;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+}
+
+.Settings .settings-container {
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  max-width: 500px;
+  padding: 10px;
+}
+
+.Settings h1 {
+  text-align: center;
+}
+
+.Settings form {
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+}
+
+.Settings label {
+  align-items: center;
+  background-color: rgb(240, 240, 240);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 10px auto;
+  padding: 5px;
+  width: fit-content;
+}
+
+.Settings select {
+  background-color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 5px;
+  padding: 5px;
+  text-align: center;
+}
+
+.Settings .loading {
+  animation: spin 3s linear infinite;
+  font-size: 50px;
+  margin: 20px;
+}
+
+.Settings button {
+  background-color: rgb(240, 240, 240);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 10px;
+}
+
+@keyframes spin {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
