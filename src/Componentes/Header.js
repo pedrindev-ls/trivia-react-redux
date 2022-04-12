@@ -7,7 +7,12 @@ class Header extends React.Component {
     const { image, name, score } = this.props;
     return (
       <div className="header-container">
-        <img src={ image } alt="profile" data-testid="header-profile-picture" />
+        <img
+          src={ image }
+          alt="profile"
+          data-testid="header-profile-picture"
+          width="50px"
+        />
         <div className="player-info">
           <h4 data-testid="header-player-name">
             {`Nome: ${name}`}

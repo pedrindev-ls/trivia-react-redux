@@ -10,38 +10,48 @@
   background-color: red;
   border: 3px solid red;
   box-shadow: 0 0 3px red , 0 0 10px red;
+  transition-duration: 2s;
+  transition-timing-function: ease;
 }
 
 .Game .correctAnswer {
   background-color: rgb(6, 240, 15);
   border: 3px solid rgb(6, 240, 15);
   box-shadow: 0 0 3px rgb(6, 240, 15) , 0 0 10px rgb(6, 240, 15);
+  transition-duration: 2s;
+  transition-timing-function: ease;
 }
 
 .Game {
+  background-image: linear-gradient(45deg, #c71fbe, yellow);
+  color: #2d0675;
   display: flex;
+  height: 100vh;
   justify-content: center;
 }
 
 .Content {
+  border: 2px solid lightgray;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  margin-top: 10%;
+  margin-top: 2%;
+  padding: 30px;
   text-align: center;
 }
 
 .Questions {
   display: flex;
   flex-direction: column;
-  margin-top: 10%;
+  padding-block-end: 2%;
   text-align: center;
 }
 
-.span {
+.Timer {
   display: flex;
   flex-direction: row;
-  font-size: 40px;
-  justify-content: center;
+  font-size: 50px;
+  padding-block-end: 5%;
 }
 
 .Answers {
@@ -50,15 +60,35 @@
 }
 
 .nextButton button {
+  background-color: yellow;
+  border: none;
+  border-radius: 9px;
+  box-shadow: 10px 5px 5px gray;
+  color: #2d0675;
+  cursor: pointer;
   font-size: 15px;
   height: 30px;
   width: 100px;
 }
 
 .Answers section button {
+  background-color: yellow;
+  border: none;
+  border-radius: 9px;
+  box-shadow: 10px 5px 5px gray;
+  color: #2d0675;
+  cursor: pointer;
   font-size: 18px;
   height: 40px;
   width: 500px;
+}
+
+.nextButton button:hover {
+  font-size: 17px;
+}
+
+.Answers section button:hover {
+  font-size: 20px;
 }
 
 .Questions p {
@@ -68,6 +98,7 @@
 }
 
 .Questions h2 {
+  font-size: 40px;
   padding-block-end: 5%;
 }
 

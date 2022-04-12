@@ -213,7 +213,8 @@ class Game extends React.Component {
             </div>
           </div>
           <div className="Timer">
-            <span>{`Tempo: ${this.renderTimer()}`}</span>
+            <span>Tempo:</span>
+            <span>{this.renderTimer()}</span>
           </div>
           <div className="nextButton">
             {this.renderNextButton()}
@@ -253,5 +254,4 @@ const mapDispatchToProps = (dispatch) => ({
   updateScore: (score) => dispatch(saveScore(score)),
   updateAssertion: (assertion) => dispatch(saveAssertions(assertion)),
 });
-
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

@@ -34,6 +34,7 @@
   border-radius: 5px;
   box-sizing: border-box;
   cursor: pointer;
+  font-size: 18px;
   height: 50px;
   margin: 5px;
   width: 444px;
@@ -49,17 +50,26 @@
   width: 50px;
 }
 
+.Login .settingsButton:hover {
+  width: 52px;
+}
+
 .Login button {
   background-color: yellow;
   border: none;
   border-radius: 9px;
-  color: black;
+  color: #2d0675;
   cursor: pointer;
+  font-size: 18px;
   height: 50px;
   left: 50%;
   margin: 5px;
   top: 50%;
   width: 375px;
+}
+
+.Login button:hover {
+  font-size: 20px;
 }
 
 .botoes {

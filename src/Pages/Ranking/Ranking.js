@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './rankingStyle.css';
 
 class Ranking extends React.Component {
   render() {
     // const { name, email, play } = this.state;
     return (
-      <div>
+      <div className="Ranking">
         <h2 data-testid="ranking-title">Ranking</h2>
         <button
           type="button"
@@ -14,6 +15,7 @@ class Ranking extends React.Component {
             history.push('/');
           } }
           data-testid="btn-go-home"
+          className="buttonInicio"
         >
           Início
         </button>
