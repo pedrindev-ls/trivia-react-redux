@@ -1,5 +1,5 @@
 # Projeto Trivia React Redux
-  Este foi mais um projeto em grupo da Trybe onde desenvolvemos um site com um jogo de trivia, ao qual representa um jogo de perguntas e respostas sem um tema espeifico onde você tem um tempo para responder cada pergunta e marcar pontos
+  Este foi mais um projeto em grupo da Trybe onde desenvolvemos um site com um jogo de trivia, que representa um jogo de perguntas e respostas sem um tema espeifico onde você tem um tempo para responder cada pergunta e marcar pontos
   
 ## Participantes do Projeto
  - **[Danielly Olimpo](https://github.com/daniolimpiof)**
